@@ -1,0 +1,43 @@
+/* Base styles for the site */
+body {
+    font-family: 'Open Sans', sans-serif;
+    color: #333333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    color: #2b3990;
+}
+
+a {
+    color: #f15a29;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header styles */
+header {
+    background-color: #2b3990;
+    color: white;
+    padding: 1rem 0;
+}
+
+/* Footer styles */
+footer {
+    background-color: #f7f7f7;
+    padding: 2rem 0;
+    margin-top: 2rem;
+}

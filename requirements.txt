@@ -1,0 +1,28 @@
+# Wagtail and Django
+Django>=4.2,<5.1
+wagtail>=6.2,<6.3
+
+# Database
+psycopg2-binary>=2.9.6
+dj-database-url>=2.0.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Production
+gunicorn>=21.2.0
+whitenoise>=6.5.0
+
+# Testing
+pytest>=7.3.1
+pytest-django>=4.5.2
+pytest-cov>=4.1.0
+coverage>=7.2.7
+
+# Code quality
+flake8>=6.0.0
+isort>=5.12.0
+black>=23.3.0
+
+# Security
+django-csp>=3.7

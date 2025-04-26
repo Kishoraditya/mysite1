@@ -1,0 +1,8 @@
+include LICENSE
+include README.md
+recursive-include mysite/static *
+recursive-include mysite/templates *
+recursive-include home/templates *
+recursive-include home/static *
+recursive-include search/templates *
+recursive-include search/static *
