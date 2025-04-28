@@ -56,3 +56,5 @@ htmlcov/
 /media/
 /docs/
 r_requirements.txt
+node_modules
+node_modules/

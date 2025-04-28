@@ -1,0 +1,13 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+<section class="testimonials-section">
+    <div class="container">
+        {% if self.title %}
+            <h2 class="section-title">{{ self.title }}</h2>
+        {% endif %}
+        <div class="testimonials-slider">
+            {% for testimonial in self.testimonials %}
+                {% include_block testimonial %}
+            {% endfor %}
+        </div>
+    </div>
+</section>

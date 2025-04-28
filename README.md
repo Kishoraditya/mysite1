@@ -1,6 +1,7 @@
 # Wagtail CMS Project
 
 A production-ready Wagtail CMS project with PostgreSQL integration, containerization, and automated testing.
+A flexible landing page application built with Wagtail CMS.
 
 ## Features
 
@@ -11,6 +12,18 @@ A production-ready Wagtail CMS project with PostgreSQL integration, containeriza
 - Health check endpoint
 - Environment variable management
 - Static analysis with flake8 and isort
+- Fully customizable landing pages with modular components
+- SEO optimization built-in
+- Responsive design
+- Accessibility compliant
+- Performance optimized
+- Docker deployment ready
+
+## Requirements
+
+- Python 3.8+
+- PostgreSQL
+- Docker and Docker Compose (for containerized deployment)
 
 ## Project Structure
 
@@ -38,6 +51,44 @@ mysite/
 │   │       └── home_page.html
 │   └── tests/                 # Tests for home app
 │       └── test_home_page.py
+├── landing/                   # Landing app
+│   ├── migrations/            # Database migrations
+│   │   └── 0001_initial.py
+│   ├── models.py              # Page models
+│   ├── static/
+│   │   ├── css/
+│   │   │    └── landing.css
+│   │   └── js/
+│   │       ├── modules/
+│   │       │    ├──accessiblity.js
+│   │       │    ├──lazyload.js
+│   │       │    ├──performance.js
+│   │       │    └──testimonials.js
+│   │       ├── tests/
+│   │       │    ├──performance.test.js
+│   │       │    └──setup.js
+│   │       ├──main.js
+│   │       └── sw.js
+│   ├── templates/             # HTML templates
+│   │   └── landing/
+│   │       ├── blocks/
+│   │       │    ├── content_block.html
+│   │       │    ├── cta_block.html
+│   │       │    ├── feature_block.html
+│   │       │    ├── features_block.html
+│   │       │    ├── hero_block.html
+│   │       │    ├── testimonial_block.html
+│   │       │    └── testimonials_block.html
+│   │       └── landing_page.html
+│   ├── tests/                 # Tests for home app
+│   │   ├── test_accessibility.py
+│   │   ├── test_models.py
+│   │   ├── test_seo.py
+│   │   └── test_views.py
+│   ├── admin.py  
+│   ├── apps.py  
+│   ├── views.py  
+│   └── urls.py  
 ├── Makefile                   # Make commands
 ├── manage.py                  # Django management script
 ├── MANIFEST.in
@@ -48,14 +99,21 @@ mysite/
 │   │   └── production.py
 │   ├── static/
 │   ├── templates/             # Project templates
+│   │   ├── 500.html
+│   │   ├── 404.html
+│   │   ├── robots.txt
+│   │   ├── sitemap.xml
 │   │   └── base.html
 │   ├── tests/                 # Project tests
 │   │   └── test_health_check.py
-│   └── urls.py                # URL configuration
+│   ├── urls.py                # URL configuration
 │   └── wsgi.py                # WSGI configuration
 ├── pytest.ini                 # Pytest configuration
 ├── README.md                  # Project README
-├── requirements.txt           # Python dependencies
+├── requirements.txt 
+├── nginx/                    # Nginx setup
+│   ├── conf.d/               # 
+│   │   └── default.conf      # Coonfig file
 ├── search/                    # Search app
 │   ├── templates/             # Search templates
 │   │   └── search/
@@ -121,6 +179,39 @@ mysite/
 
 6. Access the site at [http://localhost:8000](http://localhost:8000) and the admin at [http://localhost:8000/admin/](http://localhost:8000/admin/[)
 
+## Docker Deployment
+
+1. Make sure Docker and Docker Compose are installed on your system.
+
+2. Create a `.env` file based on `.env.example`:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Then edit the `.env` file with your production settings.
+
+3. Generate SSL certificates for HTTPS:
+
+   ```bash
+   mkdir -p nginx/ssl
+   openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout nginx/ssl/server.key -out nginx/ssl/server.crt
+   ```
+
+4. Build and start the containers:
+
+   ```bash
+   docker-compose up -d
+   ```
+
+5. Create a superuser:
+
+   ```bash
+   docker-compose exec web python manage.py createsuperuser
+   ```
+
+6. Visit [https://yourdomain.com/admin/](https://yourdomain.com/admin/) to access the Wagtail admin interface.
+
 ## Testing
 
 ### Type 1
@@ -138,6 +229,12 @@ mysite/
    ```
 
 3. View the coverage report in the `htmlcov` directory
+
+For JavaScript tests:
+
+```bash
+npm test
+```
 
 ### Type 2
 

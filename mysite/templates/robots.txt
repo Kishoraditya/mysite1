@@ -1,0 +1,8 @@
+User-agent: *
+{% if request.site.hostname == "production-domain.com" %}
+Allow: /
+{% else %}
+Disallow: /
+{% endif %}
+
+Sitemap: {{ request.scheme }}://{{ request.site.hostname }}/sitemap.xml

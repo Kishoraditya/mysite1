@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block title %}
+    {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
+{% endblock %}
+
+{% block meta_description %}
+    {% if page.search_description %}{{ page.search_description }}{% else %}{{ page.description }}{% endif %}
+{% endblock %}
+
+{% block extra_head %}
+    {% if page.description %}
+    <meta name="description" content="{{ page.description }}">
+    {% endif %}
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.site.root_url }}{{ page.url }}">
+    <meta property="og:title" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}">
+    {% if page.description %}
+    <meta property="og:description" content="{{ page.description }}">
+    {% endif %}
+    {% if page.og_image %}
+        {% image page.og_image original as og_img %}
+        <meta property="og:image" content="{{ request.site.root_url }}{{ og_img.url }}">
+    {% elif settings.landing.SEOSettings.default_og_image %}
+        {% image settings.landing.SEOSettings.default_og_image original as og_img %}
+        <meta property="og:image" content="{{ request.site.root_url }}{{ og_img.url }}">
+    {% endif %}
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    {% if settings.landing.SEOSettings.twitter_site %}
+    <meta name="twitter:site" content="{{ settings.landing.SEOSettings.twitter_site }}">
+    {% endif %}
+    <meta name="twitter:title" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}">
+    {% if page.description %}
+    <meta name="twitter:description" content="{{ page.description }}">
+    {% endif %}
+    {% if page.og_image %}
+        {% image page.og_image original as og_img %}
+        <meta name="twitter:image" content="{{ request.site.root_url }}{{ og_img.url }}">
+    {% elif settings.landing.SEOSettings.default_og_image %}
+        {% image settings.landing.SEOSettings.default_og_image original as og_img %}
+        <meta name="twitter:image" content="{{ request.site.root_url }}{{ og_img.url }}">
+    {% endif %}
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request.site.root_url }}{{ page.url }}">
+    
+    <!-- Schema.org markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}",
+        {% if page.description %}
+        "description": "{{ page.description }}",
+        {% endif %}
+        "url": "{{ request.site.root_url }}{{ page.url }}"
+    }
+    </script>
+    
+    <!-- Google Analytics -->
+    {% if settings.landing.SEOSettings.google_analytics_id %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.landing.SEOSettings.google_analytics_id }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ settings.landing.SEOSettings.google_analytics_id }}');
+    </script>
+    {% endif %}
+    
+    <!-- Site verification -->
+    {% if settings.landing.SEOSettings.google_site_verification %}
+    <meta name="google-site-verification" content="{{ settings.landing.SEOSettings.google_site_verification }}">
+    {% endif %}
+    {% if settings.landing.SEOSettings.bing_site_verification %}
+    <meta name="msvalidate.01" content="{{ settings.landing.SEOSettings.bing_site_verification }}">
+    {% endif %}
+{% endblock %}
+
+{% block body_class %}template-landingpage{% endblock %}
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+    <div class="description">{{ page.description }}</div>
+
+    <main id="main-content" role="main">
+        {% for block in page.body %}
+            {% include_block block %}
+        {% endfor %}
+    </main>
+{% endblock %}

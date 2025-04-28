@@ -8,7 +8,7 @@ from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
 from search import views as search_views
-
+from landing.views import RobotsView, SitemapView, manifest_view
 def health_check(request):
     """Health check endpoint for monitoring."""
     return JsonResponse({"status": "ok"})
@@ -19,6 +19,10 @@ urlpatterns = [
     path("documents/", include(wagtaildocs_urls)),
     path("search/", search_views.search, name="search"),
     path("healthz/", health_check, name="health_check"),
+     # SEO URLs
+    path('robots.txt', RobotsView.as_view(), name='robots'),
+    path('sitemap.xml', SitemapView.as_view(), name='sitemap'),
+    path('manifest.json', manifest_view, name='manifest'),
 ]
 
 

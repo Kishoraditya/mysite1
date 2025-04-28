@@ -1,0 +1,9 @@
+<div class="feature">
+    {% if self.icon %}
+        <div class="feature-icon">
+            <i class="fa {{ self.icon }}" aria-hidden="true"></i>
+        </div>
+    {% endif %}
+    <h3 class="feature-title">{{ self.title }}</h3>
+    <p class="feature-description">{{ self.description }}</p>
+</div>

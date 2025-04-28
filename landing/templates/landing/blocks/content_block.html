@@ -1,0 +1,21 @@
+{% load wagtailimages_tags wagtailcore_tags %}
+
+<section class="content-section">
+    <div class="container">
+        <div class="content-wrapper {% if self.image %}with-image image-{{ self.image_position }}{% endif %}">
+            <div class="content-text">
+                {% if self.title %}
+                    <h2 class="section-title">{{ self.title }}</h2>
+                {% endif %}
+                <div class="rich-text">
+                    {{ self.content|richtext }}
+                </div>
+            </div>
+            {% if self.image %}
+                <div class="content-image">
+                    {% image self.image width-600 class="img-fluid" %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>

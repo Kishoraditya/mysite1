@@ -1,9 +1,15 @@
 {% load static wagtailcore_tags wagtailuserbar %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ request.LANGUAGE_CODE|default:'en' }}">
     <head>
         <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        
+        {% block meta %}
+            <meta name="description" content="{% block meta_description %}{% endblock %}" />
+        {% endblock %}
         <title>
             {% block title %}
                 {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
@@ -13,42 +19,144 @@
                 {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
             {% endblock %}
         </title>
-        <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-        {# Global stylesheets #}
-        {% block extra_css_before %}{% endblock %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/mysite.css' %}">
-        {% block extra_css %}{% endblock %}
+        
+        {% if page.description %}
+        <meta name="description" content="{{ page.description }}" />
+        {% elif settings.landing.SEOSettings.site_description %}
+        <meta name="description" content="{{ settings.landing.SEOSettings.site_description }}" />
+        {% endif %}
+        
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" />
+        <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}" />
+        
+        <!-- Web App Manifest -->
+        <link rel="manifest" href="{% url 'manifest' %}" />
+        
+        <!-- Preload critical assets -->
+        <link rel="preload" href="{% static 'fonts/montserrat-bold.woff2' %}" as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href="{% static 'fonts/opensans-regular.woff2' %}" as="font" type="font/woff2" crossorigin />
+        
+        <!-- Preconnect to external domains -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        
+        <!-- Global stylesheets -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/mysite.css' %}" />
+        
+        {% block extra_css %}
+        <!-- Page specific CSS -->
+        {% endblock %}
+        
+        {% block extra_head %}
+        <!-- Additional head content -->
+        {% endblock %}
+        
+        <!-- Structured data -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "{% wagtail_site as current_site %}{% if current_site %}{{ current_site.site_name }}{% else %}My Site{% endif %}",
+            "url": "{{ request.scheme }}://{{ request.site.hostname }}"
+        }
+        </script>
+        
+        <!-- Google Analytics -->
+        {% if settings.landing.SEOSettings.google_analytics_id %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.landing.SEOSettings.google_analytics_id }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ settings.landing.SEOSettings.google_analytics_id }}');
+        </script>
+        {% endif %}
     </head>
 
     <body class="{% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
-
+        
+        <!-- Skip to content link for accessibility -->
+        <a href="#main-content" class="skip-link">Skip to content</a>
+        
         <header>
             <div class="container">
-                <h1>{% if request.site.site_name %}{{ request.site.site_name }}{% else %}My Site{% endif %}</h1>
-                <nav>
-                    <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/search">Search</a></li>
-                    </ul>
-                </nav>
+                <div class="header-content">
+                    <div class="logo">
+                        <a href="/">
+                            <img src="{% static 'images/logo.svg' %}" alt="{% wagtail_site as current_site %}{% if current_site %}{{ current_site.site_name }}{% else %}My Site{% endif %}" width="150" height="50" />
+                        </a>
+                    </div>
+                    <nav aria-label="Main navigation">
+                        <ul class="nav-links">
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/about/">About</a></li>
+                            <li><a href="/services/">Services</a></li>
+                            <li><a href="/contact/">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </header>
 
-        <main>
+        <main id="main-content" role="main">
             {% block content %}{% endblock %}
         </main>
 
         <footer>
             <div class="container">
-                <p>&copy; {% now "Y" %} My Site. All rights reserved.</p>
+                <div class="footer-content">
+                    <div class="footer-logo">
+                        <img src="{% static 'images/logo-white.svg' %}" alt="{% wagtail_site as current_site %}{% if current_site %}{{ current_site.site_name }}{% else %}My Site{% endif %}" width="120" height="40" />
+                    </div>
+                    <div class="footer-links">
+                        <div class="footer-nav">
+                            <h3>Navigation</h3>
+                            <ul>
+                                <li><a href="/">Home</a></li>
+                                <li><a href="/about/">About</a></li>
+                                <li><a href="/services/">Services</a></li>
+                                <li><a href="/contact/">Contact</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-contact">
+                            <h3>Contact Us</h3>
+                            <address>
+                                <p>123 Main Street<br>City, State 12345</p>
+                                <p>Email: <a href="mailto:info@example.com">info@example.com</a></p>
+                                <p>Phone: <a href="tel:+11234567890">(123) 456-7890</a></p>
+                            </address>
+                        </div>
+                        <div class="footer-social">
+                            <h3>Follow Us</h3>
+                            <ul class="social-links">
+                                <li><a href="https://facebook.com/" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a></li>
+                                <li><a href="https://twitter.com/" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a></li>
+                                <li><a href="https://instagram.com/" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a></li>
+                                <li><a href="https://linkedin.com/" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; {% now "Y" %} {% wagtail_site as current_site %}{% if current_site %}{{ current_site.site_name }}{% else %}My Site{% endif %}. All rights reserved.</p>
+                    <ul class="legal-links">
+                        <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                        <li><a href="/terms-of-service/">Terms of Service</a></li>
+                        <li><a href="/sitemap/">Sitemap</a></li>
+                    </ul>
+                </div>
             </div>
         </footer>
 
         {# Global javascript #}
-        <script type="text/javascript" src="{% static 'js/mysite.js' %}"></script>
-        {% block extra_js %}{% endblock %}
+        <script type="module" src="{% static 'js/main.js' %}"></script>
+        
+        {% block extra_js %}
+        <!-- Page specific JS -->
+        {% endblock %}
     </body>
 </html>

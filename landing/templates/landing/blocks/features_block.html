@@ -1,0 +1,13 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+<section class="features-section">
+    <div class="container">
+        {% if self.title %}
+            <h2 class="section-title">{{ self.title }}</h2>
+        {% endif %}
+        <div class="features-grid">
+            {% for feature in self.features %}
+                {% include_block feature %}
+            {% endfor %}
+        </div>
+    </div>
+</section>

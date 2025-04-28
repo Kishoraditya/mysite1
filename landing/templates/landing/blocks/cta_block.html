@@ -1,0 +1,11 @@
+<section class="cta-section" {% if self.background_color %}style="background-color: {{ self.background_color }};"{% endif %}>
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">{{ self.title }}</h2>
+            {% if self.text %}
+                <p class="cta-text">{{ self.text }}</p>
+            {% endif %}
+            <a href="{{ self.button_link }}" class="cta-button">{{ self.button_text }}</a>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,18 @@
+{% load wagtailimages_tags %}
+
+<div class="testimonial">
+    <blockquote class="testimonial-quote">
+        {{ self.quote }}
+    </blockquote>
+    <div class="testimonial-author">
+        {% if self.image %}
+            {% image self.image fill-100x100 class="testimonial-image" %}
+        {% endif %}
+        <div class="testimonial-info">
+            <cite class="testimonial-name">{{ self.author }}</cite>
+            {% if self.role %}
+                <span class="testimonial-role">{{ self.role }}</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
